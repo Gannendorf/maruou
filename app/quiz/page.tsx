@@ -40,7 +40,9 @@ export default function QuizPage() {
       });
       const json = await res.json();
       if (!res.ok) {
-        throw new Error(json?.error || 'クイズ取得に失敗しました');
+        const detail = typeof json?.detail === 'string' ? json.detail :
+                       JSON.stringify(json?.detail || {});
+        throw new Error((json?.error || 'クイズ取得に失敗しました') + (detail ? `: ${detail}` : ''));
       }
       setData(json as QuizResponse);
       // 回答リセット
